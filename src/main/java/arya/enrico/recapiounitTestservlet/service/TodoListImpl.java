@@ -3,6 +3,10 @@ package arya.enrico.recapiounitTestservlet.service;
 import arya.enrico.recapiounitTestservlet.model.Todo;
 import arya.enrico.recapiounitTestservlet.repository.Repository;
 
+import java.io.FileNotFoundException;
+import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class TodoListImpl implements TodoList {
@@ -51,6 +55,15 @@ public class TodoListImpl implements TodoList {
     @Override
     public Todo check(int id) {
        return  repository.check(id);
+    }
+    @Override
+    public int batchTodo(Path path){
+        if(!Files.exists(path)){
+            throw new IllegalArgumentException("file tidak ada");
+        }else{
+            return repository.prosesBacth(path);
+        }
+
 
 
     }

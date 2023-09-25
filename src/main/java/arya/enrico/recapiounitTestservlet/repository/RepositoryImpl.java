@@ -1,12 +1,17 @@
 package arya.enrico.recapiounitTestservlet.repository;
 
 import arya.enrico.recapiounitTestservlet.model.Todo;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RepositoryImpl implements Repository {
     private Connection connection;
+
 
     public RepositoryImpl(Connection connection) {
         this.connection = connection;
@@ -37,12 +42,12 @@ public class RepositoryImpl implements Repository {
     public Todo updateTodo(int id, String todo) {
         Todo result = new Todo();
         String sql = "UPDATE todo set list_todo = ?  WHERE id =?";
-        try(PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1,todo);
-            statement.setInt(2,id);
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, todo);
+            statement.setInt(2, id);
             statement.executeUpdate();
             result = check(id);
-        }catch (SQLException exception){
+        } catch (SQLException exception) {
             System.out.println(exception.getMessage());
         }
         return result;
@@ -52,13 +57,13 @@ public class RepositoryImpl implements Repository {
     @Override
     public int deleteTodo(int id) {
         String sql = "DELETE FROM todo WHERE todo.id = ?";
-        int result=0;
-        try(PreparedStatement statement = connection.prepareStatement(sql)){
-           statement.setInt(1,id);
-           result = statement.executeUpdate();
+        int result = 0;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            result = statement.executeUpdate();
 
 
-        }catch (SQLException exception){
+        } catch (SQLException exception) {
             System.out.println(exception.getMessage());
         }
         return result;
@@ -103,5 +108,31 @@ public class RepositoryImpl implements Repository {
             System.out.println(excetion.getMessage());
         }
         return result;
+    }
+
+    public int prosesBacth(Path file) {
+
+        String sql = "INSERT INTO todo (list_todo) value (?) ";
+        String todo;
+        int[] temp;
+        int result=0;
+        try (BufferedReader reader = Files.newBufferedReader(file);
+            PreparedStatement statement  = connection.prepareStatement(sql)
+        ) {
+            while ((todo = reader.readLine())!= null){
+                statement.clearParameters();
+                statement.setString(1,todo);
+                statement.addBatch();
+            }
+
+            temp = statement.executeBatch();
+            result = temp.length;
+
+
+        } catch (IOException | SQLException  e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+
     }
 }

@@ -8,6 +8,7 @@ import arya.enrico.recapiounitTestservlet.service.TodoListImpl;
 import org.junit.jupiter.api.*;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -103,6 +104,16 @@ public class TodoListTest {
         Todo actual =todoList.update(13,todo);
         Assertions.assertEquals(dump.getTodo() ,actual.getTodo());
         Assertions.assertEquals(dump.getId() ,actual.getId());
+    }
+
+    @Test
+    @DisplayName("add todo with batch ")
+    public void addTodoWithBatch(){
+        Path path = Path.of("src/main/resources/todo.txt");
+        System.out.println(path.getParent());
+        var result = todoList.batchTodo(path);
+        Assertions.assertNotEquals(0,result);
+        Assertions.assertEquals(3,result);
     }
 
 

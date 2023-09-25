@@ -1,4 +1,4 @@
-package arya.enrico.recapiounitTestservlet;
+package arya.enrico.recapiounitTestservlet.service;
 
 import arya.enrico.recapiounitTestservlet.model.Todo;
 

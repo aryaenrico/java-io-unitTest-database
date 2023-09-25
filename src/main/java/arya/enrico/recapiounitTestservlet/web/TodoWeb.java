@@ -15,6 +15,7 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/todo")
 public class TodoWeb extends HttpServlet {
     TodoList todos = new TodoListImpl(Injection.createTodo());
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String todo = req.getParameter("todo");
@@ -26,9 +27,44 @@ public class TodoWeb extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        for(var data:todos.getAllTodo()){
+        for (var data : todos.getAllTodo()) {
             resp.getWriter().println(data.getTodo());
         }
     }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(req.getParameter("id"));
+            int result = todos.delete(id);
+            if (result > 0) {
+                resp.getWriter().println("Data berhasil Dihapus");
+            } else {
+                resp.getWriter().println("Data gagal dihapus");
+            }
+        } catch (NumberFormatException e) {
+            resp.getWriter().println("Harap masukan data id dengan menggunakan format angka");
+        }
+
+
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        try {
+            int id = Integer.parseInt(req.getParameter("id"));
+            String newTodo = req.getParameter("todo");
+            Todo result = todos.update(id, newTodo);
+            if (result.getTodo() != null) {
+                resp.getWriter().println("Data berhasil Diubah");
+            } else {
+                resp.getWriter().println("Data gagal Diubah");
+            }
+        } catch (NumberFormatException exception) {
+            resp.getWriter().println("Harap masukan data id dengan menggunakan format angka");
+        }
+
+    }
+
 }

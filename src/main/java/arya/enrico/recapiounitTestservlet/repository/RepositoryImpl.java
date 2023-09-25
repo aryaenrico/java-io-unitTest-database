@@ -96,6 +96,7 @@ public class RepositoryImpl implements Repository {
     public Todo check(int id) {
         Todo result = new Todo();
         String sql = "SELECT id,list_todo FROM todo WHERE id = ?";
+
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();

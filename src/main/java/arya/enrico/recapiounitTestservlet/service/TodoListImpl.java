@@ -14,7 +14,7 @@ public class TodoListImpl implements TodoList {
 
     @Override
     public Todo addTodo(String todo) {
-        if (todo == null) {
+        if (todo == null || todo.isBlank() || todo.isEmpty()) {
             throw new IllegalArgumentException("Todo tidak noleh kosong ");
         }
         var id = repository.createTodo(todo);
@@ -23,16 +23,35 @@ public class TodoListImpl implements TodoList {
 
     @Override
     public List<Todo> getAllTodo() {
-        return null;
+
+        return repository.getAllTodo();
+
     }
 
     @Override
-    public String delete(int id) {
-        return null;
+    public int delete(int id) {
+        Todo todo = check(id);
+        if (todo.getTodo() ==  null){
+            throw new IllegalArgumentException("data tersebut tidak ada");
+        }else{
+           return  repository.deleteTodo(id);
+        }
     }
 
     @Override
     public Todo update(int id, String todo) {
-        return null;
+        Todo result = check(id);
+        if (result.getTodo() ==  null){
+            throw new IllegalArgumentException("data tersebut tidak ada");
+        }else{
+            return repository.updateTodo(id,todo);
+        }
+    }
+
+    @Override
+    public Todo check(int id) {
+       return  repository.check(id);
+
+
     }
 }

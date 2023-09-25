@@ -7,7 +7,8 @@ import java.util.List;
 public interface TodoList {
     Todo addTodo(String todo);
     List<Todo> getAllTodo();
-    String delete(int id);
+    int delete(int id);
     Todo update(int id ,String todo);
+    Todo check(int id);
 
 }

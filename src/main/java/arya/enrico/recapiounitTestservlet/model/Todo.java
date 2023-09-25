@@ -3,10 +3,13 @@ package arya.enrico.recapiounitTestservlet.model;
 public class Todo {
     private int id;
     private String todo;
+    public Todo(){
 
-     public Todo(String todo){
+    }
+    public Todo(String todo){
         this.todo = todo;
     }
+
     public Todo(int id, String todo){
         this.id =id;
         this.todo = todo;

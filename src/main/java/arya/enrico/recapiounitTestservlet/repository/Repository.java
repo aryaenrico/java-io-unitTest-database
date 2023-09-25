@@ -9,4 +9,5 @@ public interface Repository {
     Todo updateTodo(int id, String todo);
     int deleteTodo(int id);
     int createTodo(String todo);
+    Todo check(int id);
 }
